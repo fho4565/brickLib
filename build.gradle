@@ -1,0 +1,94 @@
+plugins {
+    id 'net.minecraftforge.gradle' version '5.1.+'
+}
+
+group = 'fho4565'
+version = '1.0'
+
+java {
+    archivesBaseName = 'fho4565'
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+}
+repositories {
+    maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+    gradlePluginPortal()
+}
+minecraft {
+    mappings channel: 'official', version: '1.18.1'
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'fho4565'
+            mods {
+                morecommand {
+                    source sourceSets.main
+                }
+            }
+        }
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'fho4565'
+            mods {
+                morecommand {
+                    source sourceSets.main
+                }
+            }
+        }
+        gameTestServer {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'fho4565'
+            mods {
+                morecommand {
+                    source sourceSets.main
+                }
+            }
+        }
+        data {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            args '--mod', 'brickLib', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            mods {
+                morecommand {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {
+
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.18.1-39.1.2'
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : "brickLib",
+                "Specification-Vendor"    : "fho4565",
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Vendor"   : "fho4565",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar')
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
